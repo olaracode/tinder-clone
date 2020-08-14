@@ -1,0 +1,48 @@
+import React, {useState, useEffect} from 'react'
+import database from './firebase'
+import TinderCard from 'react-tinder-card'
+import './TinderCard.css'
+
+function TinderCards() {
+    const [people, setPeople] = useState([
+        {
+            name: 'Steve Jobs',
+            url: 'https://upload.wikimedia.org/wikipedia/commons/d/dc/Steve_Jobs_Headshot_2010-CROP_%28cropped_2%29.jpg'
+        },
+        {
+            name: 'Matt Zuck',
+            url: 'data:image/jpeg;base64,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'
+        }
+    ])
+
+    useEffect(() => {
+        database
+            .collection('people')
+            .onSnapshot((snapshot) => 
+                setPeople(snapshot.docs.map((doc) => doc.data()))
+        )
+    }, [])
+
+    return (
+        <div>
+            <div className="tinderCards_cardContainer">
+                {people.map(person => (
+                    <TinderCard 
+                        className="swipe" 
+                        key={person.name}
+                        preventSwipe={['up', 'down']}
+                    >
+                        <div style={{backgroundImage: `url(${person.url})`}} className='card'>
+                            <h3>{person.name}</h3>
+                            
+                        </div>
+                    </TinderCard>
+                ))}
+            </div>
+           
+        </div>
+          
+    )
+}
+
+export default TinderCards
